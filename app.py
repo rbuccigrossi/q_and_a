@@ -98,9 +98,13 @@ def upvote_question(question_id):
 # --- Serve a Simple Test Page (Optional - for basic testing) ---
 @app.route('/')
 def index():
-    """Serves the main HTML page."""
-    # This tells Flask to look for index.html in the 'templates' folder
-    return render_template('index.html')
+    """Serves the audience view."""
+    return render_template('index.html', presenter=False)
+
+@app.route('/present/')
+def presenter_view():
+    """Serves the presenter view with additional controls."""
+    return render_template('index.html', presenter=True)
 
 # --- Run the App ---
 if __name__ == '__main__':
