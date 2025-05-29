@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audience Q&A</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Audience Q&A</h1>
+
+        <div class="input-section">
+            <h2>Ask a New Question:</h2>
+            <form id="add-question-form">
+                <input type="text" id="question-text" placeholder="Type your question here..." required>
+                <button type="submit">Ask Question</button>
+            </form>
+            <p id="error-message" class="error"></p>
+        </div>
+
+        <div class="questions-section">
+            <h2>Current Questions:</h2>
+            <button id="update-button">Update Now</button>
+            <div id="question-list">
+                <p>Loading questions...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

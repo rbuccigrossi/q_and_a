@@ -1,0 +1,124 @@
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #0056b3; /* A slightly Google-ish blue */
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+}
+
+.input-section form {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.input-section input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+}
+
+.input-section button, #update-button, .question-item button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    margin-left: -1px; /* Join buttons */
+}
+
+.input-section button {
+     border-radius: 0 4px 4px 0;
+}
+
+#update-button {
+    margin-bottom: 20px;
+    background-color: #28a745;
+}
+
+.input-section button:hover, #update-button:hover, .question-item button:hover {
+    opacity: 0.9;
+}
+
+.question-item {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.question-content {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.question-votes {
+    font-weight: bold;
+    background-color: #e9ecef;
+    padding: 5px 10px;
+    border-radius: 10px;
+    margin-right: 10px;
+    min-width: 30px;
+    text-align: center;
+}
+
+.question-actions button {
+    margin-left: 5px;
+    background-color: #6c757d;
+}
+
+.question-actions button.upvote-btn {
+     background-color: #ff9800;
+}
+
+.question-actions button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+/* Presentation Window Styles */
+.presentation-body {
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: sans-serif;
+    overflow: hidden; /* Hide scrollbars */
+}
+
+.presentation-question {
+    font-size: 6vw; /* Responsive font size based on viewport width */
+    text-align: center;
+    padding: 5%;
+}
