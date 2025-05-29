@@ -75,6 +75,12 @@ h1, h2 {
     margin-right: 10px;
 }
 
+.question-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
 .question-votes {
     font-weight: bold;
     background-color: #e9ecef;
