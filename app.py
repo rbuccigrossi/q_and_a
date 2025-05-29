@@ -1,4 +1,12 @@
-from flask import Flask, request, jsonify, render_template
+from flask import (
+    Flask,
+    request,
+    jsonify,
+    render_template,
+    send_from_directory,
+    redirect,
+    url_for,
+)
 from flask_cors import CORS  # Import CORS
 import os
 import json
@@ -105,6 +113,48 @@ def index():
 def presenter_view():
     """Serves the presenter view with additional controls."""
     return render_template('index.html', presenter=True)
+
+# --- Admin Routes ---
+
+@app.route('/admin')
+def admin_page():
+    """Serves a simple admin interface."""
+    return render_template('admin.html')
+
+
+@app.route('/admin/download')
+def download_questions():
+    """Allows downloading the current questions.json file."""
+    if not os.path.exists(FILE_PATH):
+        write_questions([])
+    return send_from_directory(BASE_DIR, DATA_FILE, as_attachment=True)
+
+
+@app.route('/admin/upload', methods=['POST'])
+def upload_questions():
+    """Replaces questions.json with the uploaded file."""
+    uploaded = request.files.get('file')
+    if not uploaded or uploaded.filename == '':
+        return redirect(url_for('admin_page'))
+
+    try:
+        data = json.load(uploaded)
+    except json.JSONDecodeError:
+        return redirect(url_for('admin_page'))
+
+    # Validate that the uploaded data is a list
+    if not isinstance(data, list):
+        return redirect(url_for('admin_page'))
+
+    write_questions(data)
+    return redirect(url_for('admin_page'))
+
+
+@app.route('/admin/clear', methods=['POST'])
+def clear_questions():
+    """Empties the questions file."""
+    write_questions([])
+    return redirect(url_for('admin_page'))
 
 # --- Run the App ---
 if __name__ == '__main__':
