@@ -63,15 +63,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 upvoteBtn.disabled = true;
             }
 
+            actions.appendChild(votes);
+            actions.appendChild(upvoteBtn);
+
             if (window.isPresenter) {
                 const presentBtn = document.createElement('button');
                 presentBtn.textContent = 'Present';
                 presentBtn.onclick = () => presentQuestion(q.text);
                 actions.appendChild(presentBtn);
             }
-
-            actions.appendChild(votes);
-            actions.appendChild(upvoteBtn);
 
             item.appendChild(content);
             item.appendChild(actions);
