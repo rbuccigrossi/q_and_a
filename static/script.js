@@ -69,7 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (window.isPresenter) {
                 const presentBtn = document.createElement('button');
                 presentBtn.textContent = 'Present';
-                presentBtn.onclick = () => presentQuestion(q.text);
+                presentBtn.className = 'present-btn';
+
+                // Style button based on whether this question was presented before
+                if (getPresentedIds().includes(q.id)) {
+                    presentBtn.classList.add('presented');
+                }
+
+                presentBtn.onclick = () => presentQuestion(q.text, q.id, presentBtn);
                 actions.appendChild(presentBtn);
             }
 
@@ -133,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function presentQuestion(text) {
+    function presentQuestion(text, id, button) {
         const windowName = "QAPresentationWindow";
 
         // Try to focus existing window, or open a new one
@@ -159,6 +166,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 </style>
                 <div class="presentation-question">${escapeHTML(text)}</div>
             `;
+            addPresentedId(id);
+            if (button) {
+                button.classList.add('presented');
+            }
         } else {
             alert("Please allow pop-ups for this site to use the Present feature.");
         }
@@ -175,6 +186,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!ids.includes(id)) {
             ids.push(id);
             sessionStorage.setItem('upvotedQuestions', JSON.stringify(ids));
+        }
+    }
+
+    // --- Presentation Tracking (Session-based) ---
+
+    function getPresentedIds() {
+        return JSON.parse(sessionStorage.getItem('presentedQuestions') || '[]');
+    }
+
+    function addPresentedId(id) {
+        const ids = getPresentedIds();
+        if (!ids.includes(id)) {
+            ids.push(id);
+            sessionStorage.setItem('presentedQuestions', JSON.stringify(ids));
         }
     }
 
