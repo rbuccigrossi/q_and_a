@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Tools</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin</h1>
+        <h2>Download Questions</h2>
+        <p><a class="admin-button" href="{{ url_for('download_questions') }}">Download questions.json</a></p>
+        <h2>Upload Questions</h2>
+        <form action="{{ url_for('upload_questions') }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".json" required>
+            <button type="submit" class="admin-button">Upload</button>
+        </form>
+        <h2>Clear Questions</h2>
+        <form action="{{ url_for('clear_questions') }}" method="post" onsubmit="return confirm('Are you sure you want to delete all questions?');">
+            <button type="submit" class="admin-button">Clear All</button>
+        </form>
+        <p class="switch-link"><a href="{{ url_for('index') }}">Back to Q&A</a></p>
+    </div>
+</body>
+</html>
