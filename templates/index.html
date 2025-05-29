@@ -26,8 +26,16 @@
                 <p>Loading questions...</p>
             </div>
         </div>
+        {% if not presenter %}
+        <p class="switch-link"><a href="{{ url_for('presenter_view') }}">Switch to Presenter</a></p>
+        {% else %}
+        <p class="switch-link"><a href="{{ url_for('index') }}">Back to Audience</a></p>
+        {% endif %}
     </div>
 
+    <script>
+        window.isPresenter = {{ 'true' if presenter else 'false' }};
+    </script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
