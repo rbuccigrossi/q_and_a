@@ -116,7 +116,7 @@ def presenter_view():
 
 # --- Admin Routes ---
 
-@app.route('/admin')
+@app.route('/admin/')
 def admin_page():
     """Serves a simple admin interface."""
     return render_template('admin.html')

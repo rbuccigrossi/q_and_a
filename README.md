@@ -45,8 +45,9 @@ question.
    python app.py
    ```
 
-   The app will listen on `http://localhost:5000` with debug mode enabled.
-   Open `/` for the audience view or `/present/` for the presenter view.
+  The app will listen on `http://localhost:5000` with debug mode enabled.
+  Open `/` for the audience view, `/present/` for the presenter view, or
+  `/admin/` for the admin interface.
 
 3. **Deploying**
 
