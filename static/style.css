@@ -128,3 +128,13 @@ h1, h2 {
     text-align: center;
     padding: 5%;
 }
+
+.switch-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.switch-link a {
+    color: #007bff;
+    text-decoration: underline;
+}
