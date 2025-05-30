@@ -129,11 +129,13 @@ def upvote_question(question_id):
 
 # --- Serve a Simple Test Page (Optional - for basic testing) ---
 @app.route('/')
+@login_required
 def index():
     """Serves the audience view."""
     return render_template('index.html', presenter=False)
 
 @app.route('/present/')
+@login_required
 def presenter_view():
     """Serves the presenter view with additional controls."""
     return render_template('index.html', presenter=True)

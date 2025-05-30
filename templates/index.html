@@ -28,7 +28,7 @@
         </div>
         {% if not presenter %}
         <p class="switch-link"><a href="{{ url_for('presenter_view') }}">Switch to Presenter</a>
-            {% if session.get('user') %}| <a href="{{ url_for('logout') }}">Logout</a>{% else %}| <a href="{{ url_for('login') }}">Admin Login</a>{% endif %}
+            {% if session.get('user') %}| <a href="{{ url_for('logout') }}">Logout</a>{% endif %}
         </p>
         {% else %}
         <p class="switch-link"><a href="{{ url_for('index') }}">Back to Audience</a>
