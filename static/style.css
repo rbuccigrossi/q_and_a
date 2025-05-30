@@ -28,6 +28,12 @@ h1, h2 {
     margin-bottom: 10px;
 }
 
+.anon-label {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
 .input-section input[type="text"] {
     flex-grow: 1;
     padding: 10px;
@@ -73,6 +79,12 @@ h1, h2 {
 .question-content {
     flex-grow: 1;
     margin-right: 10px;
+}
+
+.question-author {
+    font-size: 0.8em;
+    color: #555;
+    text-align: right;
 }
 
 .question-actions {
@@ -137,6 +149,12 @@ h1, h2 {
     font-size: 6vw; /* Responsive font size based on viewport width */
     text-align: center;
     padding: 5%;
+}
+
+.presentation-author {
+    font-size: 2vw;
+    margin-top: 1vh;
+    text-align: right;
 }
 
 .switch-link {
