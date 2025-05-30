@@ -1,3 +1,5 @@
+"""Audience Q&A Flask application."""
+
 from flask import (
     Flask,
     request,
@@ -11,6 +13,7 @@ from flask import (
 from flask_cors import CORS  # Import CORS
 from authlib.integrations.flask_client import OAuth
 from functools import wraps
+from werkzeug.middleware.proxy_fix import ProxyFix
 import config
 import os
 import json
@@ -25,6 +28,8 @@ FILE_PATH = os.path.join(BASE_DIR, DATA_FILE)
 
 # --- Flask App Setup ---
 app = Flask(__name__)
+# Respect X-Forwarded-Proto and Host headers when behind a proxy
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 # Enable CORS for all routes under /api/
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 app.secret_key = config.Config.SECRET_KEY
