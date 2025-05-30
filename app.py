@@ -99,11 +99,16 @@ def add_question():
         return jsonify({"error": "Question text cannot be empty"}), 400
 
     new_question_text = request.json['text'].strip()
+    anonymous_flag = bool(request.json.get('anonymous'))
     questions = read_questions()
+
+    user = session.get('user', {})
+    author = 'anonymous' if anonymous_flag else user.get('name', 'anonymous')
 
     new_question = {
         'id': str(uuid.uuid4()),
         'text': new_question_text,
+        'author': author,
         'votes': 0
         # We might add 'upvoters': [] later if we implement user tracking
     }
