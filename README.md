@@ -65,3 +65,25 @@ question.
    write access to the project directory, or configure persistent
    storage accordingly. For multi-user deployments consider switching to
    a database such as SQLite or PostgreSQL.
+
+## OAuth2 Configuration
+
+This application supports Google OAuth2 for authentication. To enable it:
+
+1. Create an OAuth2 Client ID in the Google Cloud Console and configure the
+   authorized redirect URI to `http://localhost:5000/authorize` (replace the
+   host if deploying elsewhere).
+2. Copy `.env.example` to `.env` and fill in the following values (or set them
+   as environment variables) before running the app:
+
+   - `GOOGLE_CLIENT_ID` – OAuth2 client ID.
+   - `GOOGLE_CLIENT_SECRET` – OAuth2 client secret.
+   - `ALLOWED_DOMAIN` – Google Workspace domain allowed to sign in.
+   - `SECRET_KEY` – secret key used by Flask to secure sessions.
+
+The application loads these variables automatically using
+[`python-dotenv`](https://github.com/theskumar/python-dotenv).
+
+Once configured, visiting `/login` will start the sign‑in flow and `/logout`
+will clear the session. Access to `/admin/` requires an authenticated user
+from the allowed domain.

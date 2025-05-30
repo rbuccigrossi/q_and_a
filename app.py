@@ -6,8 +6,12 @@ from flask import (
     send_from_directory,
     redirect,
     url_for,
+    session,
 )
 from flask_cors import CORS  # Import CORS
+from authlib.integrations.flask_client import OAuth
+from functools import wraps
+import config
 import os
 import json
 import uuid
@@ -23,6 +27,26 @@ FILE_PATH = os.path.join(BASE_DIR, DATA_FILE)
 app = Flask(__name__)
 # Enable CORS for all routes under /api/
 CORS(app, resources={r"/api/*": {"origins": "*"}})
+app.secret_key = config.Config.SECRET_KEY
+
+oauth = OAuth(app)
+google = oauth.register(
+    name="google",
+    client_id=config.Config.GOOGLE_CLIENT_ID,
+    client_secret=config.Config.GOOGLE_CLIENT_SECRET,
+    server_metadata_url=config.Config.GOOGLE_DISCOVERY_URL,
+    client_kwargs={"scope": "openid email profile"},
+)
+
+def login_required(func):
+    """Decorator to ensure the user is logged in."""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if "user" not in session:
+            return redirect(url_for("login"))
+        return func(*args, **kwargs)
+
+    return wrapper
 
 # --- Data Handling ---
 # Thread lock for safe file writes
@@ -114,15 +138,41 @@ def presenter_view():
     """Serves the presenter view with additional controls."""
     return render_template('index.html', presenter=True)
 
+@app.route('/login')
+def login():
+    """Starts the Google OAuth flow."""
+    redirect_uri = url_for('authorize', _external=True)
+    return google.authorize_redirect(redirect_uri, hd=config.Config.ALLOWED_DOMAIN)
+
+
+@app.route('/authorize')
+def authorize():
+    """Handles the OAuth callback and stores the user session."""
+    token = google.authorize_access_token()
+    user = google.parse_id_token(token)
+    if not user or not user.get('email', '').endswith('@' + config.Config.ALLOWED_DOMAIN):
+        return "Unauthorized", 403
+    session['user'] = user
+    return redirect(url_for('index'))
+
+
+@app.route('/logout')
+def logout():
+    """Logs out the current user."""
+    session.clear()
+    return redirect(url_for('index'))
+
 # --- Admin Routes ---
 
 @app.route('/admin/')
+@login_required
 def admin_page():
     """Serves a simple admin interface."""
     return render_template('admin.html')
 
 
 @app.route('/admin/download')
+@login_required
 def download_questions():
     """Allows downloading the current questions.json file."""
     if not os.path.exists(FILE_PATH):
@@ -131,6 +181,7 @@ def download_questions():
 
 
 @app.route('/admin/upload', methods=['POST'])
+@login_required
 def upload_questions():
     """Replaces questions.json with the uploaded file."""
     uploaded = request.files.get('file')
@@ -151,6 +202,7 @@ def upload_questions():
 
 
 @app.route('/admin/clear', methods=['POST'])
+@login_required
 def clear_questions():
     """Empties the questions file."""
     write_questions([])
