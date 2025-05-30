@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const questionList = document.getElementById('question-list');
     const addQuestionForm = document.getElementById('add-question-form');
     const questionText = document.getElementById('question-text');
+    const anonymousCheckbox = document.getElementById('anonymous-checkbox');
     const updateButton = document.getElementById('update-button');
     const errorMessage = document.getElementById('error-message');
 
@@ -45,7 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const content = document.createElement('div');
             content.className = 'question-content';
-            content.textContent = q.text;
+
+            const textEl = document.createElement('div');
+            // Show question and author on one line
+            textEl.textContent = `${q.text} -- ${q.author}`;
+
+            content.appendChild(textEl);
 
             const votes = document.createElement('span');
             votes.className = 'question-votes';
@@ -76,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     presentBtn.classList.add('presented');
                 }
 
-                presentBtn.onclick = () => presentQuestion(q.text, q.id, presentBtn);
+                presentBtn.onclick = () => presentQuestion(q.text, q.author, q.id, presentBtn);
                 actions.appendChild(presentBtn);
             }
 
@@ -92,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function handleAddQuestion(event) {
         event.preventDefault(); // Prevent page reload
         const text = questionText.value.trim();
+        const anonymous = anonymousCheckbox.checked;
 
         if (!text) {
             errorMessage.textContent = "Question cannot be empty.";
@@ -102,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`${API_BASE_URL}/questions`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: text })
+                body: JSON.stringify({ text: text, anonymous: anonymous })
             });
 
             if (!response.ok) {
@@ -111,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             questionText.value = ''; // Clear input
+            anonymousCheckbox.checked = false;
             errorMessage.textContent = ''; // Clear error
             await fetchQuestions(); // Refresh list immediately
 
@@ -140,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function presentQuestion(text, id, button) {
+    function presentQuestion(text, author, id, button) {
         const windowName = "QAPresentationWindow";
 
         // Try to focus existing window, or open a new one
@@ -163,8 +171,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     .presentation-question {
                         font-size: 6vw; text-align: center; padding: 5%;
                     }
+                    .presentation-author {
+                        font-size: 2vw; margin-top: 1vh; text-align: right;
+                    }
                 </style>
-                <div class="presentation-question">${escapeHTML(text)}</div>
+                <div class="presentation-question">${escapeHTML(text)}<div class="presentation-author">${escapeHTML(author)}</div></div>
             `;
             addPresentedId(id);
             if (button) {
