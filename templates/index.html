@@ -27,13 +27,9 @@
             </div>
         </div>
         {% if not presenter %}
-        <p class="switch-link"><a href="{{ url_for('presenter_view') }}">Switch to Presenter</a>
-            {% if session.get('user') %}| <a href="{{ url_for('logout') }}">Logout</a>{% endif %}
-        </p>
+        <p class="switch-link"><a href="{{ url_for('presenter_view') }}">Switch to Presenter</a></p>
         {% else %}
-        <p class="switch-link"><a href="{{ url_for('index') }}">Back to Audience</a>
-            {% if session.get('user') %}| <a href="{{ url_for('logout') }}">Logout</a>{% endif %}
-        </p>
+        <p class="switch-link"><a href="{{ url_for('index') }}">Back to Audience</a></p>
         {% endif %}
     </div>
 
