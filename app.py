@@ -140,16 +140,23 @@ def presenter_view():
 
 @app.route('/login')
 def login():
-    """Starts the Google OAuth flow."""
+    """Starts the Google OAuth flow with a unique nonce."""
     redirect_uri = url_for('authorize', _external=True)
-    return google.authorize_redirect(redirect_uri, hd=config.Config.ALLOWED_DOMAIN)
+    nonce = uuid.uuid4().hex
+    session['nonce'] = nonce  # Store nonce for later validation
+    return google.authorize_redirect(
+        redirect_uri,
+        hd=config.Config.ALLOWED_DOMAIN,
+        nonce=nonce,
+    )
 
 
 @app.route('/authorize')
 def authorize():
     """Handles the OAuth callback and stores the user session."""
     token = google.authorize_access_token()
-    user = google.parse_id_token(token)
+    user = google.parse_id_token(token, nonce=session.get('nonce'))
+    session.pop('nonce', None)  # Remove nonce after use
     if not user or not user.get('email', '').endswith('@' + config.Config.ALLOWED_DOMAIN):
         return "Unauthorized", 403
     session['user'] = user
